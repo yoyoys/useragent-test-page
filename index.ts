@@ -1,5 +1,6 @@
 import { UAParser } from 'ua-parser-js';
-const uaPaser = new UAParser();
+import UserAgent from './userAgent';
+const parser = new UAParser();
 
 const uaDom = document.querySelector('.ua');
 
@@ -17,56 +18,7 @@ const makeDom = (tag: string, inner: HTMLElement|HTMLElement[]|string, innerText
   return dom;
 }
 
-const reduceToLowerCase: <T>(o: T) => T = (o: any) =>
-  Object.keys(o).reduce((sum: any, k: string) => {
-    const val = o[k];
-    sum[k] = val ? val.toLocaleLowerCase() : val;
-    return sum;
-  }, {});
-
-
-export class UserAgent {
-  public device = reduceToLowerCase(uaPaser.getDevice());
-
-  public broswer = reduceToLowerCase(uaPaser.getBrowser());
-
-  public os = reduceToLowerCase(uaPaser.getOS());
-
-  public get isApp(): boolean {
-    return this.isIos || this.isAndroid;
-  }
-
-  public get isKiosk(): boolean {
-    return ['mac os', 'windows'].includes(this.os.name!);
-  }
-
-  public get isIos(): boolean {
-    return this.os.name === 'ios';
-  }
-
-  public get isAndroid(): boolean {
-    return this.os.name === 'android';
-  }
-
-  public get isMobile(): boolean {
-    return this.device.type === 'mobile';
-  }
-
-  public get isTablet(): boolean {
-    const isIpad = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
-    return this.device.type === 'tablet' || isIpad;
-  }
-
-  public get isIphone(): boolean {
-    return this.device.model === 'iphone';
-  }
-
-  public get isIpad(): boolean {
-    return this.device.model === 'ipad';
-  }
-}
-
-const userAgent = new UserAgent();
+const userAgent = new UserAgent(parser);
 
 const devicesDom = () => {
   const pairs = Object.entries(userAgent.device)
