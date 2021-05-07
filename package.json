@@ -4,6 +4,6 @@
     "typescript": "^3.7.5"
   },
   "dependencies": {
-    "ua-parser-js": "^0.7.21"
+    "ua-parser-js": "^0.7.24"
   }
 }
